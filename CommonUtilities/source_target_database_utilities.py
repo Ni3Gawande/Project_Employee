@@ -69,14 +69,13 @@ def check_record_counts_between_tables(source_table, engine1, target_table, engi
     # target_count = pd.read_sql(target_query, engine2)
     # source_count = source_count.shape[0]
     # target_count = target_count.shape[0]
-
+    logger.info(f"Executing the query and checking the count of {source_table}")
     source_query=f'select count(*)count from {source_table}'
+    logger.info(f"Executing the query and checking the count of {target_table}")
     target_query=f"Select count(*)count from {target_table}"
-
     source_count = pd.read_sql(source_query, engine1)['count'][0]
     target_count = pd.read_sql(target_query, engine2)['count'][0]
-
-
+    logger.info(f"Comparing the count between {source_table} and {target_table}")
     difference = source_count - target_count
     if difference != 0:
         count = pd.DataFrame({
@@ -125,3 +124,12 @@ def check_data_validation_for_table(source_query, source_engine, target_query, t
     else:
         raise AssertionError('Data validation failed')
 
+
+def check_the_filter_target_table(target_query,engine,defect_file_path):
+    filter=pd.read_sql(target_query,engine)
+    if filter.empty:
+        logger.info('Filter condition passed')
+    else:
+        logger.info(f'Filter condition failed and unfiltered records are stored in a file at loacation: {defect_file_path}')
+        save_basic_check_defect_file(filter,defect_file_path)
+        raise AssertionError('Records found that does not match filter condition')

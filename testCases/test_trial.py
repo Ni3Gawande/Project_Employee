@@ -34,16 +34,17 @@ class Test_table:
     #         logger.error(f"Error Detail: {e}")
     #         pytest.fail(f"Test case failed due to : {e}")
     #
-    def test_count_betweenS_source_and_target(self, connect_sqlserverdb_engine2):
-        logger.info('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
-        try:
-            # source_table_query = "select * from EMP_DTS_SRC1"
+    # def test_count_betweenS_source_and_target(self, connect_sqlserverdb_engine2):
+    #     logger.info('TC-Checking the counts between two tables')
+    #     try:
+    #         # source_table_query = "select * from EMP_DTS_SRC1"
             # target_table_query = "select * from EMP_DTS_TRG"
-            check_record_counts_between_tables('EMP_DTS_SRC1', connect_sqlserverdb_engine2,'EMP_DTS_TRG', connect_sqlserverdb_engine2,
-                                               'count_SRC1_DTR2.csv')
-        except Exception as e:
-            logger.error(f"Error details : {e}")
-            pytest.fail(f"Test case failed due to {e}")
+        #     check_record_counts_between_tables('EMP_DTS_SRC1', connect_sqlserverdb_engine2,'EMP_DTS_TRG', connect_sqlserverdb_engine2,
+        #                                        'count_SRC1_DTR2.csv')
+        #     logger.info("Test case passed")
+        # except Exception as e:
+        #     logger.error(f"Error details : {e}")
+        #     pytest.fail(f"Test case failed due to {e}")
 
     # def test_duplicate(self,connect_sqlserverdb_engine):
     #     logger.info('-------------------------z-------------------------')
@@ -94,3 +95,36 @@ class Test_table:
     #         logger.error(f"Error details: {e}")
     #         pytest.fail(f'Test case failed due to {e}')
 
+    # def test_filter(self,connect_sqlserverdb_engine2):
+    #
+    #     try:
+    #         query='select * from EMP_DTS_SRC1 where emp_salary < 1000.0'
+    #         check_the_filter_target_table(query,connect_sqlserverdb_engine2, 'filter.csv')
+    #     except Exception as e:
+    #         logger.error(f'Error details: {e}')
+    #         pytest.fail(f'test case failed due to {e}')
+
+    def test_filter_table(self,connect_sqlserverdb_engine2):
+
+        try:
+            query='select * from EMP_DTS_TRG where emp_salary < 1000.0'
+            check_the_filter_target_table(query,connect_sqlserverdb_engine2, 'targetfilter.csv')
+        except Exception as e:
+            logger.error(f'Error details: {e}')
+            pytest.fail(f'test case failed due to {e}')
+
+    # @pytest.mark.parametrize('query, file_location', [
+    #     ("SELECT * FROM EMP_DTS_SRC1 WHERE emp_salary < 1000.0", "filter1.csv"),
+    #     ("SELECT * FROM EMP_DTS_SRC2 WHERE emp_salary < 1000.0", "filter2.csv"),
+    #     ("SELECT * FROM EMP_DTS_SRC3 WHERE emp_salary < 1000.0", "filter3.csv"),
+    #     ])
+    # def test_filter(self, connect_sqlserverdb_engine2, query, file_location):
+    #     """
+    #     Test the filtering of data based on the provided SQL query and save mismatches to a file.
+    #     """
+    #     try:
+    #         check_the_filter_target_table(query, connect_sqlserverdb_engine2, file_location)
+    #         logger.info(f"Filter validation passed for query: {query}")
+    #     except Exception as e:
+    #         logger.error(f"Error details: {e}")
+    #         pytest.fail(f"Test case failed for query: {query} with error: {e}")
