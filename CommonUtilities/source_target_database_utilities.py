@@ -131,15 +131,14 @@ def check_the_filter_target_table(target_query,engine,defect_file_path):
         raise AssertionError('Records found that does not match filter condition')
 
 
-# def check_meta_data_testing(metadatafile,query,engine,loc):
-#     expected_schema=pd.read_csv(metadatafile).astype(str)
-#     # expected_schema=pd.DataFrame(schema).astype(str)
-#     actual_schema=pd.read_sql(query,engine).astype(str)
-#     logger.info(f"\n{expected_schema}")
-#     logger.info(f"\n{actual_schema}")
-#     defect_file=save_the_mismatch_to_file(expected_schema,actual_schema,loc)
-#     if not defect_file.empty:
-#         raise AssertionError('Data validation failed')
-#     else:
-#         logger.info('Data Validation Passed')
-
+def check_meta_data_of_table(metadatafile, query, engine, path):
+    logger.info("Expected meta data of the table from mapping document")
+    df_source = pd.read_csv(metadatafile).astype(str)
+    logger.info("Actual meta data of the table")
+    df_actual = pd.read_sql(query, engine).astype(str)
+    logger.info('Validating meta data of the tables')
+    defect_file=save_the_mismatch_to_file(df_source, df_actual, path)
+    if defect_file.empty:
+        logger.info('MetaData validation passed')
+    else:
+        raise AssertionError('MetaData validation failed')

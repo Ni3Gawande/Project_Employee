@@ -115,3 +115,16 @@ def test_data_check_filter(connect_sqlserverdb_engine2):
     except Exception as e:
         logger.error(f"Error details: {e}")
         pytest.fail(f"Test case failed: {e}")
+
+@pytest.mark.smoke
+def test_metadata_of_tabel(connect_sqlserverdb_engine2):
+    logger.info("TC_10-MetaData Testing of table: EMP_DTS_SRC2")
+    try:
+        query="select TABLE_NAME,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,ORDINAL_POSITION from INFORMATION_SCHEMA.columns where table_name='EMP_DTS_SRC2' "
+        check_meta_data_of_table(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\MetaData_EMP_DTS_SRC2.csv",query,connect_sqlserverdb_engine2,'metadeta_emp_Sts_src2.csv')
+        logger.info("MetaData testing passed from table: EMP_DTS_SRC2 ")
+    except Exception as e:
+        logger.error(f"Error details: {e}")
+        pytest.fail(f"Test case failed: {e}")
+
+#########              REMAINING WILL BE COLUMN LEVEL VALIATION CAN BE ACHIVED BY  check_data_validation_for_columns()              ########
