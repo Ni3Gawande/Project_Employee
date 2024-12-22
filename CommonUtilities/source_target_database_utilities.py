@@ -64,11 +64,19 @@ def check_null_records_in_table(table, engine, defect_file):
         save_basic_check_defect_file(null, defect_file)
         raise ValueError(f"{table} contain null value in it")
 
-def check_record_counts_between_tables(source_query, engine1, target_query, engine2, defect_file):
-    source_count = pd.read_sql(source_query, engine1)
-    target_count = pd.read_sql(target_query, engine2)
-    source_count = source_count.shape[0]
-    target_count = target_count.shape[0]
+def check_record_counts_between_tables(source_table, engine1, target_table, engine2, defect_file):
+    # source_count = pd.read_sql(source_query, engine1)
+    # target_count = pd.read_sql(target_query, engine2)
+    # source_count = source_count.shape[0]
+    # target_count = target_count.shape[0]
+
+    source_query=f'select count(*)count from {source_table}'
+    target_query=f"Select count(*)count from {target_table}"
+
+    source_count = pd.read_sql(source_query, engine1)['count'][0]
+    target_count = pd.read_sql(target_query, engine2)['count'][0]
+
+
     difference = source_count - target_count
     if difference != 0:
         count = pd.DataFrame({

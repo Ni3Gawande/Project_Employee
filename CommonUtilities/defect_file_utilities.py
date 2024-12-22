@@ -12,9 +12,9 @@ def save_defect_data_validation_to_file(source_query,target_query,path):
     location=fr"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{path}"
     if not defect_file.empty:
         defect_file.to_csv(location,index=False)
-        logger.error(f"Defect file is stored at location: {location}")
+        logger.error(f"Mismatch records at location: {location}")
     else:
-        logger.info("No defects found. Defect file was not created.")
+        logger.info("No mismatch recrds. Defect file was not created.")
     return defect_file
 
 
