@@ -1,12 +1,12 @@
-from CommonUtilities.source_file_target_file import *
 import pytest
+from CommonUtilities.custom_logger import *
 from CommonUtilities.source_target_database_utilities import database_basics
 
 
 class Test_table:
     database=database_basics()
 
-    @pytest.mark.xfail
+
     def test_required_tables_exist_in_database(self,connect_sqlserverdb_engine2):
         logger.info("TC_01-Check all the required tables exists in database")
         try:
