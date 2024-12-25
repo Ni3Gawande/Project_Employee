@@ -1,7 +1,7 @@
 import pytest
 from CommonUtilities.custom_logger import *
 from CommonUtilities.source_target_database_utilities import database_basics
-
+import pandas as pd
 
 class Test_table:
     database=database_basics()
