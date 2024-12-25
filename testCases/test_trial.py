@@ -1,5 +1,5 @@
 import pytest
-from CommonUtilities.custom_logger import *
+from CommonUtilities.custom_logger import logger
 from CommonUtilities.source_target_database_utilities import database_basics
 import pandas as pd
 
