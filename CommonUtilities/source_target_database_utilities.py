@@ -1,6 +1,7 @@
-import pandas as pd
 from CommonUtilities.custom_logger import logger
 from CommonUtilities.defect_file_utilities import *
+import pandas as pd
+#
 #
 #
 # # Verify that all the expected tables in the database
