@@ -116,7 +116,7 @@ def test_data_check_filter(connect_sqlserverdb_engine2):
         logger.error(f"Error details: {e}")
         pytest.fail(f"Test case failed: {e}")
 
-@pytest.mark.smoke
+
 def test_metadata_of_tabel(connect_sqlserverdb_engine2):
     logger.info("TC_10-MetaData Testing of table: EMP_DTS_SRC2")
     try:

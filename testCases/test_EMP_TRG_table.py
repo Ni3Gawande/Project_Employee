@@ -1,7 +1,9 @@
 import pytest
 from CommonUtilities.custom_logger import logger
 from CommonUtilities.utilities import *
-#
+from CommonUtilities.source_target_database_utilities import *
+
+
 #
 class Test_EMP_TRG:
 
@@ -30,30 +32,29 @@ class Test_EMP_TRG:
     def test_duplicate_records_in_table(self, connect_sqlserverdb_engine):
         logger.info("TC_03-Check duplicates in the table")
         try:
-            check_duplicates_in_table('k9', connect_sqlserverdb_engine,'dupe.csv')
+            check_duplicates_in_table('k9', connect_sqlserverdb_engine, 'dupe.csv')
             logger.info("Test case passed no duplicates in table")
         except Exception as e:
             logger.info(f"Test case failed due to {e}")
             logger.error(f"Error due to: {e}")
             pytest.fail(f"Test case failed due to {e}")
 
-
     def test_null_records_in_tables(self, connect_sqlserverdb_engine):
         logger.info("TC_04 - Check null records in table")
         try:
-            check_null_records_db('table3', connect_sqlserverdb_engine,'table3.csv')
+            check_null_records_db('table3', connect_sqlserverdb_engine, 'table3.csv')
             logger.info("Test cas passed")
         except Exception as e:
             logger.error(f"Error due to: {e}")
             pytest.fail(f"Test case failed due to {e}")
-
 
     def test_emp_name_column(self, connect_sqlserverdb_engine):
         logger.info("TC_05-validate data from source to target for emp_name column")
         try:
             source_query = "Select employee_id,first_name from employees"
             target_query = "select employee_id,first_name from employees"
-            db_to_db_testing(source_query, connect_sqlserverdb_engine, target_query, connect_sqlserverdb_engine,'defect.csv')
+            db_to_db_testing(source_query, connect_sqlserverdb_engine, target_query, connect_sqlserverdb_engine,
+                             'defect.csv')
             logger.info("test case passed")
         except Exception as e:
             logger.error(f"Test case failed")
@@ -63,6 +64,7 @@ class Test_EMP_TRG:
     def test_data(self, connect_sqlserverdb_engine):
         select('employees', connect_sqlserverdb_engine)
 
+    @pytest.mark.smoke
     def test_meta_data_validation(self, connect_sqlserverdb_engine):
         logger.info(' TC_06-MEta data testing')
         schema = {
@@ -89,4 +91,26 @@ class Test_EMP_TRG:
             logger.error(f"error Due to: {e}")
             pytest.fail(f"TEst case faile due to {e}")
 
-
+    # @pytest.mark.smoke
+    # def test_meta_data_validation(self, connect_sqlserverdb_engine):
+    #     logger.info(' TC_06-MEta data testing')
+    #     schema = {
+    #         'Table_name': ['employees'] * 11,
+    #         'Column_name': ['EMPLOYEE_ID', 'FIRST_NAME', 'LAST_NAME', 'EMAIL', 'PHONE_NUMBER', 'HIRE_DATE',
+    #                         'JOB_ID',
+    #                         'SALARY', 'COMMISSION_PCT', 'MANAGER_ID', 'DEPARTMENT_ID'],
+    #         'Data_type': ['int', 'varchar', 'varchar', 'varchar', 'varchar', 'date', 'varchar', 'decimal',
+    #                       'decimal',
+    #                       'numeric', 'numeric'],
+    #         'CHARACTER_MAXIMUM_LENGTH': [None, 20, 25, 25, 20, None, 10, None, None, None, None],
+    #         'ORDINAL_POSITION': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    #     }
+    #
+    #     query = "Select table_name,column_name,Data_type,Character_maximum_length,ordinal_position from information_schema.columns where table_name='employees' "
+    #
+    #     try:
+    #         check_meta_data_testing(schema, query, connect_sqlserverdb_engine,'metadeat.csv')
+    #         logger.info("Meta data testing passed")
+    #     except Exception as e:
+    #         logger.error(f"Error Details: {e}")
+    #         pytest.fail(f"Test case failed details: {e}")

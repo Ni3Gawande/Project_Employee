@@ -1,0 +1,3 @@
+TABLE_NAME,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,ORDINAL_POSITION,table
+EMP_DTS_SRC2,Created_On,datetime,nan,10,target_table
+EMP_DTS_SRC2,Created_On,datetime,nan,101,source_table

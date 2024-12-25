@@ -2,7 +2,8 @@ import pandas as pd
 from CommonUtilities.custom_logger import logger
 from CommonUtilities.source_target_database_utilities import *
 from CommonUtilities.source_file_target_database import *
-from CommonUtilities.file_source_file_target import *
+from CommonUtilities.source_file_target_file import *
+from CommonUtilities.source_file_target_file import *
 import pytest
 
 
@@ -70,7 +71,7 @@ class Test_table:
     #     except Exception as e:
     #         logger.error(f"Error occurred during data extraction: {e}")
     #         pytest.fail(f"Test failed due to an error: {e}")
-    #
+
     # def test_some(self,connect_mysqldb_engine):
     #     try:
     #         logger.info("read the data from csv file")
@@ -104,14 +105,14 @@ class Test_table:
     #         logger.error(f'Error details: {e}')
     #         pytest.fail(f'test case failed due to {e}')
 
-    def test_filter_table(self,connect_sqlserverdb_engine2):
-
-        try:
-            query='select * from EMP_DTS_TRG where emp_salary < 1000.0'
-            check_the_filter_target_table(query,connect_sqlserverdb_engine2, 'targetfilter.csv')
-        except Exception as e:
-            logger.error(f'Error details: {e}')
-            pytest.fail(f'test case failed due to {e}')
+    # def test_filter_table(self,connect_sqlserverdb_engine2):
+    #
+    #     try:
+    #         query='select * from EMP_DTS_TRG where emp_salary < 1000.0'
+    #         check_the_filter_target_table(query,connect_sqlserverdb_engine2, 'targetfilter.csv')
+    #     except Exception as e:
+    #         logger.error(f'Error details: {e}')
+    #         pytest.fail(f'test case failed due to {e}')
 
     # @pytest.mark.parametrize('query, file_location', [
     #     ("SELECT * FROM EMP_DTS_SRC1 WHERE emp_salary < 1000.0", "filter1.csv"),
@@ -128,3 +129,30 @@ class Test_table:
     #     except Exception as e:
     #         logger.error(f"Error details: {e}")
     #         pytest.fail(f"Test case failed for query: {query} with error: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+    # def test_meta_data_testing(self,connect_sqlserverdb_engine):
+    #
+    #     try:
+    #         query="select TABLE_NAME,COLUMN_NAME,CHARACTER_MAXIMUM_LENGTH,ORDINAL_POSITION from information_schema.columns where table_name='k9' "
+    #         check_entire_data(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\metadatak9.csv",query,connect_sqlserverdb_engine,'check.csv')
+    #
+    #     except Exception as e:
+    #         pytest.fail(f"faild details: {e}")
+
+
+    def testfile(self):
+        try:
+            check_duplicate_in_file(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\sales_data.csv",'csv','dddd.csv')
+        except Exception as e:
+            pytest.fail(f"{e}")

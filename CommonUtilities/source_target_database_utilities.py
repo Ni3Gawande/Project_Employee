@@ -77,6 +77,25 @@ def check_record_counts_between_tables(source_table, engine1, target_table, engi
     else:
         logger.info('Source to target count matches')
 
+## Verify that the row count of the source table matches the target table is uses joins to perform.
+def count_check(source_query,engine1,target_query,engine2,defect_file):
+    source_count = pd.read_sql(source_query, engine1)['count'][0]
+    target_count = pd.read_sql(target_query, engine2)['count'][0]
+    logger.info(f"Comparing the count between source and target")
+    difference = source_count - target_count
+    if difference != 0:
+        count = pd.DataFrame({
+            'source_count': [source_count],
+            'target_count': [target_count],
+            'difference between source and target': [difference]
+        })
+        save_basic_check_defect_file(count, defect_file)
+        raise ValueError(
+            f"Source and Target count mismatch as source count: {source_count}, target count: {target_count}")
+    else:
+        logger.info('Source to target count matches')
+
+
 # Verify the presence of duplicate records in the columns
 def check_duplicates_by_columns(query,engine,defect_file):
     duplicates=pd.read_sql(query,engine)
