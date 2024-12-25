@@ -5,7 +5,7 @@ from CommonUtilities.source_file_target_database import *
 from CommonUtilities.source_file_target_file import *
 from CommonUtilities.source_file_target_file import *
 import pytest
-
+from sqlalchemy import create_engine,text
 
 class Test_table:
 
@@ -151,8 +151,26 @@ class Test_table:
     #         pytest.fail(f"faild details: {e}")
 
 
-    def testfile(self):
-        try:
-            check_duplicate_in_file(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\sales_data.csv",'csv','dddd.csv')
-        except Exception as e:
-            pytest.fail(f"{e}")
+    # def testfile(self):
+    #     try:
+    #         check_duplicate_in_file(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\sales_data.csv",'csv','dddd.csv')
+    #     except Exception as e:
+    #         pytest.fail(f"{e}")
+    #
+    # def test_query(self,connect_sqlserverdb_engine):
+    #     query = text("""alter table k9 drop column state""")
+    #     connect_sqlserverdb_engine.execute(query)
+    #     connect_sqlserverdb_engine.commit()
+    #     query2="Select * from information_schema.columns where table_name='k9' and column_name='state'"
+    #     if query2 is not None:
+    #         logger.info("Test passed")
+    #     else:
+    #         pytest.fail()
+
+    def test_query(self, connect_sqlserverdb_engine):
+        # Query to drop the 'state' column from the 'k9' table
+        query = text("""ALTER TABLE k9 DROP COLUMN state""")
+        connect_sqlserverdb_engine.execute(query)  # Execute the drop column query
+        connect_sqlserverdb_engine.commit()
+
+

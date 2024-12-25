@@ -133,4 +133,9 @@ def check_meta_data_of_table(metadatafile, query, engine, path):
         raise AssertionError('MetaData validation failed')
 
 
-def check_truncate()
+# def check_truncate(query,engine):
+#     connection=engine
+#     connection.execute(query)
+#     connection.commit()
+
+
