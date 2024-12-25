@@ -1,13 +1,50 @@
-import pandas as pd
-from CommonUtilities.custom_logger import logger
-from CommonUtilities.source_target_database_utilities import *
-from CommonUtilities.source_file_target_database import *
-from CommonUtilities.source_file_target_file import *
 from CommonUtilities.source_file_target_file import *
 import pytest
-from sqlalchemy import create_engine,text
+from CommonUtilities.source_target_database_utilities import database_basics
+
 
 class Test_table:
+    database=database_basics()
+
+    @pytest.mark.xfail
+    def test_required_tables_exist_in_database(self,connect_sqlserverdb_engine2):
+        logger.info("TC_01-Check all the required tables exists in database")
+        try:
+            """ tables=['EMP_DTS_SRC2','EMP_DTS_TRG','Ksbsdhfb7']  # failing testcase by adding k9 as it is not availabe in database"""
+
+            tables = ['EMP_DTS_SRC2', 'EMP_DTS_TRG']
+            logger.info("Checking table present in database")
+            self.database.check_expected_tables_available_in_database(tables, connect_sqlserverdb_engine2)
+            logger.info("Test Case passed all the requied tables exists in database")
+        except Exception as e:
+            # logger.error(f"TC_01-Failed")
+            logger.error(f'Error details: {e}')
+            pytest.fail(f"Test case failed: {e}")
+
+
+
+    @pytest.mark.smoke
+    def test_table_data_exists(self,connect_sqlserverdb_engine2):
+        logger.info("TC_02-Check data available in all the required tables")
+        try:
+            """ tables=['EMP_DTS_SRC2','EMP_DTS_TRG','K9']  # failing testcase by adding k9 as it is not availabe in database"""
+            """tables = ['EMP_DTS_SRC2', 'EMP_DTS_TRG','empty'] # dailing testcase as their is no data in empty table"""
+            tables = ['EMP_DTS_SRC2','EMP_DTS_TRG']
+            logger.info("Checking data present is tables")
+            self.database.check_data_available_in_expected_tables(tables, connect_sqlserverdb_engine2)
+            logger.info("Test case passed data is available in the tables")
+        except Exception as e:
+            logger.error(f"Error details: {e}")
+            pytest.fail(f"Test case failed: {e}")
+
+
+
+
+
+
+
+
+
 
     # def test_duplicate_records_in_table(self, connect_sqlserverdb_engine):
     #     logger.info("TC_03-Check duplicates in the table")
@@ -39,13 +76,13 @@ class Test_table:
     #     logger.info('TC-Checking the counts between two tables')
     #     try:
     #         # source_table_query = "select * from EMP_DTS_SRC1"
-            # target_table_query = "select * from EMP_DTS_TRG"
-        #     check_record_counts_between_tables('EMP_DTS_SRC1', connect_sqlserverdb_engine2,'EMP_DTS_TRG', connect_sqlserverdb_engine2,
-        #                                        'count_SRC1_DTR2.csv')
-        #     logger.info("Test case passed")
-        # except Exception as e:
-        #     logger.error(f"Error details : {e}")
-        #     pytest.fail(f"Test case failed due to {e}")
+    # target_table_query = "select * from EMP_DTS_TRG"
+    #     check_record_counts_between_tables('EMP_DTS_SRC1', connect_sqlserverdb_engine2,'EMP_DTS_TRG', connect_sqlserverdb_engine2,
+    #                                        'count_SRC1_DTR2.csv')
+    #     logger.info("Test case passed")
+    # except Exception as e:
+    #     logger.error(f"Error details : {e}")
+    #     pytest.fail(f"Test case failed due to {e}")
 
     # def test_duplicate(self,connect_sqlserverdb_engine):
     #     logger.info('-------------------------z-------------------------')
@@ -167,10 +204,10 @@ class Test_table:
     #     else:
     #         pytest.fail()
 
-    def test_query(self, connect_sqlserverdb_engine):
-        # Query to drop the 'state' column from the 'k9' table
-        query = text("""ALTER TABLE k9 DROP COLUMN state""")
-        connect_sqlserverdb_engine.execute(query)  # Execute the drop column query
-        connect_sqlserverdb_engine.commit()
+    # def test_query(self, connect_sqlserverdb_engine):
+    #     # Query to drop the 'state' column from the 'k9' table
+    #     query = text("""ALTER TABLE k9 DROP COLUMN state""")
+    #     connect_sqlserverdb_engine.execute(query)  # Execute the drop column query
+    #     connect_sqlserverdb_engine.commit()
 
 
