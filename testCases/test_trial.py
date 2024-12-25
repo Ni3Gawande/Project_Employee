@@ -37,6 +37,11 @@ class Test_table:
             logger.error(f"Error details: {e}")
             pytest.fail(f"Test case failed: {e}")
 
+    def test_dfas(self):
+        sd=pd.read_csv(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\metadatak9.csv")
+        pass
+
+
 
 
 
