@@ -1,10 +1,14 @@
 import pandas as pd
-from CommonUtilities.custom_logger import logger
+from CommonUtilities.custom_logger import LogGen
+
+a = LogGen()
+logger = a.LogGen()  # it might be wrong now this was first utility file better never use this
 
 
-def save_basic_check_defect_file(df,path):
-    location=rf"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{path}"
-    df.to_csv(location,index=False)
+def save_basic_check_defect_file(df, path):
+    location = rf"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{path}"
+    df.to_csv(location, index=False)
+
 
 def save_defect_data(df_source, df_target, filepath):
     defect_file = pd.merge(df_source, df_target, how='outer', indicator=True).query("_merge!='both'")
@@ -17,6 +21,7 @@ def save_defect_data(df_source, df_target, filepath):
     else:
         logger.info("No defects found. Defect file was not created.")
     return defect_file
+
 
 def check_the_table_available_in_database(tables, engine):
     for table in tables:
@@ -42,7 +47,7 @@ def check_data_available_in_table(tables, engine):
             raise ValueError(f"data is not available in {table}")
 
 
-def check_duplicates_in_table(table, engine,defect_file):
+def check_duplicates_in_table(table, engine, defect_file):
     logger.info("Executing the query")
     output = f"select * from {table}"
     duplicates = pd.read_sql(output, engine)
@@ -50,7 +55,7 @@ def check_duplicates_in_table(table, engine,defect_file):
     if results.empty:
         logger.info(f"{table} is not having duplicate records")
     else:
-        save_basic_check_defect_file(results,defect_file)
+        save_basic_check_defect_file(results, defect_file)
         raise ValueError(f"{table} is having duplicate records")
 
 
@@ -60,14 +65,14 @@ def select(table, engine):
     return print(df)
 
 
-def check_null_records_db(table, engine,filename):
+def check_null_records_db(table, engine, filename):
     query = f"select * from {table}"
     df = pd.read_sql(query, engine)
     check_null = df[df.isnull().any(axis=1)]
     if check_null.empty:
         logger.info(f"{table} is not having any null records")
     else:
-        check_null.to_csv(fr"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{filename}",index=False)
+        check_null.to_csv(fr"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{filename}", index=False)
         raise ValueError(f"{table} is having null records")
 
 
@@ -84,7 +89,7 @@ def db_to_db_testing(source_query, engine, target_query, engine2, path):
     df_source = pd.read_sql(source_query, engine)
     df_actual = pd.read_sql(target_query, engine2)
     logger.info('Validating data from source to target')
-    defect_file=save_defect_data(df_source, df_actual, path)
+    defect_file = save_defect_data(df_source, df_actual, path)
     if not defect_file.empty:
         raise AssertionError('Data validation failed')
     else:
