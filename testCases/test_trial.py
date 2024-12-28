@@ -1,41 +1,54 @@
 import pytest
-from CommonUtilities.custom_logger import logger
+from CommonUtilities.custom_logger import LogGen
 from CommonUtilities.source_target_database_utilities import database_basics
 import pandas as pd
 
 class Test_table:
     database=database_basics()
+    log_gen = LogGen()
+    logger = log_gen.logger()
 
 
     def test_required_tables_exist_in_database(self,connect_sqlserverdb_engine2):
-        logger.info("TC_01-Check all the required tables exists in database")
+        self.logger.info("TC_01-Check all the required tables exists in database")
         try:
             """ tables=['EMP_DTS_SRC2','EMP_DTS_TRG','Ksbsdhfb7']  # failing testcase by adding k9 as it is not availabe in database"""
 
             tables = ['EMP_DTS_SRC2', 'EMP_DTS_TRG']
-            logger.info("Checking table present in database")
+            self.logger.info("Checking table present in database")
             self.database.check_expected_tables_available_in_database(tables, connect_sqlserverdb_engine2)
-            logger.info("Test Case passed all the requied tables exists in database")
+            self.logger.info("Test Case passed all the requied tables exists in database")
         except Exception as e:
             # logger.error(f"TC_01-Failed")
-            logger.error(f'Error details: {e}')
+            self.logger.error(f'Error details: {e}')
             pytest.fail(f"Test case failed: {e}")
 
 
 
     @pytest.mark.smoke
     def test_table_data_exists(self,connect_sqlserverdb_engine2):
-        logger.info("TC_02-Check data available in all the required tables")
+        self.logger.info("TC_02-Check data available in all the required tables")
         try:
             """ tables=['EMP_DTS_SRC2','EMP_DTS_TRG','K9']  # failing testcase by adding k9 as it is not availabe in database"""
             """tables = ['EMP_DTS_SRC2', 'EMP_DTS_TRG','empty'] # dailing testcase as their is no data in empty table"""
             tables = ['EMP_DTS_SRC2','EMP_DTS_TRG']
-            logger.info("Checking data present is tables")
+            self.logger.info("Checking data present is tables")
             self.database.check_data_available_in_expected_tables(tables, connect_sqlserverdb_engine2)
-            logger.info("Test case passed data is available in the tables")
+            self.logger.info("Test case passed data is available in the tables")
         except Exception as e:
-            logger.error(f"Error details: {e}")
+            self.logger.error(f"Error details: {e}")
             pytest.fail(f"Test case failed: {e}")
+
+    def test_null_count_in_columns(self,connect_sqlserverdb_engine2):
+        self.logger.info("TestCase03")
+        try:
+            self.database.check_null_count_in_table('EMP_DTS_SRC1',connect_sqlserverdb_engine2,'EMP_DTS_SRC2_null_columns.csv')
+            self.logger.info("test case passed")
+        except Exception as e:
+
+            self.logger.error(f"Error details: {e}")
+            pytest.fail(f"Test case failed: {e}")
+
 
     def test_dfas(self):
         sd=pd.read_csv(r"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\TestData\metadatak9.csv")
