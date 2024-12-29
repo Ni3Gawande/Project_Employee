@@ -1,10 +1,12 @@
-# secure_config/config_loader.py or project root
+# config_loader.py
 
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
-# Load the .env file from the specific path (adjust the path based on where your .env file is located)
-load_dotenv(r'C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\.env')
+# Load the .env file (relative path)
+dotenv_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(dotenv_path)
 
 # Access the log file location from the .env file
 log_file_location = os.getenv('log_file_location')
