@@ -8,8 +8,9 @@ class SaveFile:
 
     # Defect Data Storage Process
     def save_basic_check_defect_file(self, df, path):
-        location = rf"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{path}"
-        self.logger.error(f'Error file location: {location}')
+        loc = rf"C:\Users\Anshu\Desktop\ss\DefectFile\\"
+        location=loc+path
+        self.logger.error(f'File is store in Project Defect file location and name is : {path}')
         df.to_csv(location, index=False)
 
     # Storing Mismatched Records from Data Validation
@@ -18,7 +19,7 @@ class SaveFile:
         defect_file['_merge'] = defect_file['_merge'].replace(
             {"left_only": "source_table", "right_only": "target_table"})
         defect_file.rename(columns={"_merge": "table"}, inplace=True)
-        location = fr"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\DefectFiles\{path}"
+        location = fr"C:C:\Users\Anshu\Desktop\ss\DefectFile\{path}"
         if not defect_file.empty:
             defect_file.to_csv(location, index=False)
             self.logger.error(f"Mismatch records at location: {location}")
@@ -27,6 +28,9 @@ class SaveFile:
         return defect_file
 
     def save_information_file(self, df, path):
-        location = rf"C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\InformationFiles\{path}"
-        self.logger.info(f'The content of the file is at: {location}')
+        loc = rf"C:\Users\Anshu\Desktop\ss\InformationFile\\"
+        location = loc + path
+        self.logger.info(f'File is store in Project Information file location and name is: {path}')
         df.to_csv(location, index=False)
+
+
