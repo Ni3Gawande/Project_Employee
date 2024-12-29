@@ -1,12 +1,16 @@
 import logging
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class LogGen:
     def logger(self):
         # Define the log directory and file
-        LOG_DIR = r'C:\Users\Anshu\Desktop\folder\ETL\ETLFramework2\Logs'
+        LOG_DIR = os.getenv("log_file_location")
         os.makedirs(LOG_DIR, exist_ok=True)  # Ensure log directory exists
-        LOG_FILE = os.path.join(LOG_DIR, 'etlprocess1.log')
+        LOG_FILE = os.path.join(LOG_DIR, 'etlprocess.log')
 
         # Create a logger
         logger = logging.getLogger(__name__)
